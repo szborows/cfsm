@@ -16,11 +16,8 @@ enum class MyState {
 };
 
 /// State machine class.
-class MyStateMachine
-    : public StateMachine<MyState>
-{
-public:
-    MyStateMachine(MyState const initialState)
+struct MyStateMachine : public StateMachine<MyState> {
+    explicit MyStateMachine(MyState const initialState)
         : StateMachine<MyState>(initialState)
     {}
 };
@@ -51,15 +48,15 @@ struct IHandler {
 };
 
 /// Two event handlers, each for particular state machine state.
-struct FirstStateHandler : public MyStateChanger<MyState::First>, IHandler {
-    void handleEvent(MyEvent const&, MyStateMachine & stateMachine) const {
+struct FirstStateHandler : MyStateChanger<MyState::First>, IHandler {
+    void handleEvent(MyEvent const&, MyStateMachine & stateMachine) const override {
         // Stuff goes here...
         changeState<MyState::Second>(stateMachine);
     }
 };
 
-struct SecondStateHandler : public MyStateChanger<MyState::Second>, IHandler {
-    void handleEvent(MyEvent const&, MyStateMachine & stateMachine) const {
+struct SecondStateHandler : MyStateChanger<MyState::Second>, IHandler {
+    void handleEvent(MyEvent const&, MyStateMachine & stateMachine) const override {
         // and also here...
         changeState<MyState::First>(stateMachine);
     }
